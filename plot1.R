@@ -1,11 +1,13 @@
-#star! 
-householdfile <- read.table("D:/R Data/exdata_data_household_power_consumption/household_power_consumption.txt", header=T, sep=";", na.strings="?")
+#code for plot1 
 
-## fetch the data according to given time period
+epc<-read.table("household_power_consumption.txt",sep=";",header=TRUE,colClasses="character");
+epcS <- subset(epc,Date %in% c("1/2/2007","2/2/2007"));
+rm(epc);
+epcS$DateF<-strptime(paste(epcS$Date,epcS$Time),"%d/%m/%Y %H:%M:%S");
+epcS$Global_active_powerF = as.numeric(epcS$Global_active_power);
 
-timeData <- householdfile[householdfile$Date %in% c("1/2/2007","2/2/2007"),]
-Timeclass <-strptime(paste(timeData$Date, timeData$Time, sep=" "),"%d/%m/%Y %H:%M:%S")
-finalData <- cbind(Timeclass, timeData)
-
-## Generating Plot 1
-hist(finalData$Global_active_power, col="red", main="Global Active Power", xlab="Global Active Power (kilowatts)")
+png(file="plot1.png");
+hist(epcS$Global_active_powerF, col = 'red',
+     xlab = 'Global Active Power (kilowatts)',
+     main = 'Global Active Power');
+dev.off();
